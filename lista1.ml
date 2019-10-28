@@ -37,7 +37,7 @@ let rec sqrList xs =
 print_list_int (sqrList [2;3;5;-4;0]);;
 
 print_endline "## Zad 5";;
-let rec palindrome xs = xs = List.rev xs;;
+let palindrome xs = xs = List.rev xs;;
 print_bool_endline (palindrome []);;
 print_bool_endline (palindrome [2;3;5;-4;0]);;
 print_bool_endline (palindrome ['a';'l';'a']);;

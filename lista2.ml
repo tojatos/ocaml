@@ -42,9 +42,8 @@ let rec initSegment xs ys =
   match (xs, ys) with
     | ([], _) -> true
     | (_, []) -> false
-    | (h1::t1, h2::t2) -> match h1 = h2 with
-        | true -> initSegment t1 t2
-        | false -> false
+    | (h1::t1, h2::t2) ->
+        if h1 = h2 then initSegment t1 t2 else false
 ;;
 
 print_bool_endline (initSegment [] [] = true);;
