@@ -11,6 +11,7 @@ print_endline "## Zad 1";;
 let moduloList (xs, x) = List.filter (fun s -> s mod x = 0) xs;;
 print_list_int (moduloList ([1;10;7;8;15], 5));;
 print_endline "## Zad 4";;
-let ( ++ ) a b =
-  if b = 0 then a else b (++) (a mod b);;
-print_int_endline (15 (++) 60)
+let rec (%%) a b =
+  if b = 0 then a else b %% (a mod b);;
+print_int_endline (15 %% 60);;
+print_int_endline (30 %% 12);;
