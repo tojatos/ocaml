@@ -15,7 +15,21 @@ let breadthBT bt =
     | Node(v, bt1, bt2)::tl -> v :: iter (tl @ [bt1] @ [bt2])
   in iter [bt]
 ;;
+
 (* TODO: optimize using fold_left (calculate all in queue and execute with new queue created from old) *)
+(*
+let breadthBT2 bt =
+  let insert elem (xs, ys) = match elem with
+    | Empty -> (xs, ys)
+    | Node(v, bt1, bt2) -> (v :: xs, bt2 :: bt1 :: ys)
+  in
+  let rec iter = function
+    | [] -> []
+    | Empty::tl -> iter tl
+    | hd::tl as xs -> List.fold_left (fun (acc, queue) elem -> insert elem (acc, queue)) ([], []) xs []
+  in iter [bt]
+;;
+*)
 
 let tt = Node(1,
                Node(2,
