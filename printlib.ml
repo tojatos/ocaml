@@ -11,3 +11,6 @@ let print_tuple_endline = function (a, b) ->
 let rec print_list_tuple_endline xs = match xs with
   | [] -> print_endline ""
   | h::t -> print_tuple h; print_list_tuple_endline t;;
+let rec print_list_list_int xss = match xss with
+  | [] -> print_endline ""
+  | h::t -> print_list_int h; print_list_list_int t;;
