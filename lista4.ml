@@ -17,7 +17,6 @@ let breadthBT bt =
 ;;
 
 (* TODO: optimize using fold_left (calculate all in queue and execute with new queue created from old) *)
-(*
 let breadthBT2 bt =
   let insert elem (xs, ys) = match elem with
     | Empty -> (xs, ys)
@@ -26,10 +25,9 @@ let breadthBT2 bt =
   let rec iter = function
     | [] -> []
     | Empty::tl -> iter tl
-    | hd::tl as xs -> List.fold_left (fun (acc, queue) elem -> insert elem (acc, queue)) ([], []) xs []
+    | xs -> match (List.fold_left (fun (acc, queue) elem -> insert elem (acc, queue)) ([], []) xs) with (acc, queue) -> List.rev acc @ iter (List.rev queue)
   in iter [bt]
 ;;
-*)
 
 let tt = Node(1,
                Node(2,
@@ -51,6 +49,7 @@ let tt = Node(1,
                    )
               );;
 print_list_int (breadthBT tt);;
+print_list_int (breadthBT2 tt);;
 
 print_endline "## Zad 5";;
 
@@ -62,10 +61,19 @@ let depthSearch (Graph graph) startNode =
   in search [] [startNode]
 ;;
 
+(*
+let breadthSearch (Graph graph) startNode =
+  let rec search visited = function
+    | [] -> []
+    | h::t -> if List.mem h visited then search visited t
+    else h::search (h::visited) (t @ graph h)
+  in search [] [startNode]
+;;
+*)
 
 let g = Graph
 (function
-  0 -> [3]
+    | 0 -> [3]
     | 1 -> [0;2;4]
     | 2 -> [1]
     | 3 -> []
@@ -74,3 +82,4 @@ let g = Graph
 );;
 
 print_list_int (depthSearch g 4);;
+(* print_list_int (breadthSearch g 4);; *)
