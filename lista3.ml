@@ -1,16 +1,10 @@
-let print_list_string xs = print_endline (String.concat " " xs);;
-let print_list_char xs = print_list_string (List.map (String.make 1) xs);;
-let print_list_int xs = print_list_string (List.map string_of_int xs);;
-let print_int_endline x = print_int x; print_endline "";;
-let print_bool_endline x = print_endline (string_of_bool x);;
-let print_float_endline x = print_endline (string_of_float x);;
-let print_tuple = function (a, b) ->
-  print_string "("; print_int a; print_string ","; print_int b; print_string ") ";;
-let print_tuple_endline = function (a, b) ->
-  print_tuple (a, b); print_endline "";;
-let rec print_list_tuple_endline xs = match xs with
-  | [] -> print_endline ""
-  | h::t -> print_tuple h; print_list_tuple_endline t;;
+open Printlib;;
+
+(*
+## Zad 1
+val f1 : (int -> int -> 'a) -> 'a = <fun>
+val f2 : (string -> 'a) -> string -> string -> 'a = <fun>
+*)
 
 print_endline "## Zad 2";;
 let curry3 f x y z = f (x, y, z);;
@@ -36,23 +30,56 @@ let mySumProd xs = List.fold_left (fun (a, b) x -> (a+x, b*x)) (0,1) xs;;
 print_tuple_endline (sumProd [1;3;2;-2;3]);;
 print_tuple_endline (mySumProd [1;3;2;-2;3]);;
 
+(*
+## Zad 4
+a) infinite loop in `quicksort large`
+b) duplicate elements may be not present in sorted list
+*)
+
 print_endline "## Zad 5";;
 let insertSort f xs =
-  let rec insert elem ys = match ys with
+  let rec insert elem = function
     | [] -> [elem]
-    | h::t -> if f h elem then elem::ys
+    | h::t as ys -> if f h elem then elem::ys
         else h::(insert elem t)
   in List.fold_left (fun acc elem -> insert elem acc) [] xs;;
-(*
-let rec mergeSort f xs =
-  match xs with
+
+let rec merge f = function
+  | ([], ys) -> ys
+  | (ys, []) -> ys
+  | ((h1::t1 as xs), (h2::t2 as ys)) ->
+      if f h1 h2 then h2 :: merge f (xs, t2)
+      else h1 :: merge f (t1, ys)
+;;
+
+let split xs =
+  let rec helper (n, zs, ys) = 
+    if n = 0 then (List.rev zs, ys)
+    else helper (n-1, List.hd ys :: zs, List.tl ys)
+  in helper (List.length xs / 2, [], xs)
+;;
+
+let rec mergeSort f = function
     | [] -> []
-    | h1::h2::t -> if f h elem then elem::ys
-        else h::(insert elem t)
-  in List.fold_left (fun acc elem -> insert elem acc) [] xs;;
-*)
+    | [x] -> [x]
+    | xs -> match split xs with
+        (left, right) ->  merge f (mergeSort f left, mergeSort f right)
+;;
 let desc a b = fst a < fst b;;
 let asc a b = fst a > fst b;;
 let list = [(5,0);(-8,1);(3,2);(74,3);(3,4);(54,5)];;
 print_list_tuple_endline (insertSort desc list);;
 print_list_tuple_endline (insertSort asc list);;
+(* print_list_int (merge (fun a b -> a > b) ([1;3;6;7;10], [0;2;6;6;8;21]));; *)
+(*
+print_list_int (fst (split [1;3;6;7;10]));;
+print_list_int (snd (split [1;3;6;7;10]));;
+print_list_int (fst (split [3;6;7;10]));;
+print_list_int (snd (split [3;6;7;10]));;
+print_list_int (fst (split []));;
+print_list_int (snd (split []));;
+print_list_int (fst (split [1]));;
+print_list_int (snd (split [1]));;
+*)
+print_list_tuple_endline (mergeSort desc list);;
+print_list_tuple_endline (mergeSort asc list);;
