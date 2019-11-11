@@ -12,11 +12,10 @@ let breadthBT bt =
   let rec iter = function
     | [] -> []
     | Empty::tl -> iter tl
-    | Node(v, bt1, bt2)::tl -> v :: iter (tl @ [bt1] @ [bt2])
+    | Node(v, bt1, bt2)::tl -> v :: iter (tl @ [bt1;bt2])
   in iter [bt]
 ;;
 
-(* TODO: optimize using fold_left (calculate all in queue and execute with new queue created from old) *)
 let breadthBT2 bt =
   let insert elem (xs, ys) = match elem with
     | Empty -> (xs, ys)
@@ -24,7 +23,6 @@ let breadthBT2 bt =
   in
   let rec iter = function
     | [] -> []
-    | Empty::tl -> iter tl
     | xs -> match (List.fold_left (fun (acc, queue) elem -> insert elem (acc, queue)) ([], []) xs) with (acc, queue) -> List.rev acc @ iter (List.rev queue)
   in iter [bt]
 ;;
@@ -50,6 +48,33 @@ let tt = Node(1,
               );;
 print_list_int (breadthBT tt);;
 print_list_int (breadthBT2 tt);;
+
+print_endline "## Zad 4";;
+
+let inPath bt =
+  let helper elem n (acc, ys) = match elem with
+    | Empty -> (acc, ys)
+    | Node(_, bt1, bt2) -> (acc+n, bt2 :: bt1 :: ys)
+  in
+  let rec iter accum n = function
+    | [] -> accum
+    | xs -> match (List.fold_left (fun (acc, queue) elem -> helper elem n (acc, queue)) (0, []) xs)
+      with (acc, queue) -> iter (accum+acc) (n+1) queue
+  in iter 0 0 [bt]
+;;
+let outPath bt =
+  let helper elem n (acc, ys) = match elem with
+    | Empty -> (acc+n, ys)
+    | Node(_, bt1, bt2) -> (acc, bt2 :: bt1 :: ys)
+  in
+  let rec iter accum n = function
+    | [] -> accum
+    | xs -> match (List.fold_left (fun (acc, queue) elem -> helper elem n (acc, queue)) (0, []) xs)
+      with (acc, queue) -> iter (accum+acc) (n+1) queue
+  in iter 0 0 [bt]
+;;
+print_int_endline (inPath tt);;
+print_int_endline (outPath tt);;
 
 print_endline "## Zad 5";;
 
