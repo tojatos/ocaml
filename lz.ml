@@ -26,7 +26,7 @@ let podziel xs =
     | Element(head, tail) ->
         begin
           match tail with 
-            | Element(h2, t2) -> Element(head, podzielIter t2)
+            | Element(_, t2) -> Element(head, podzielIter t2)
             | Koniec -> Element(head, Koniec)
         end
     | _ -> Koniec
@@ -42,7 +42,7 @@ let lpodziel xs =
     | LElement(head, tail) ->
         begin
           match tail() with 
-            | LElement(h2, t2) -> LElement(head, fun () -> lpodzielIter (t2()))
+            | LElement(_, t2) -> LElement(head, fun () -> lpodzielIter (t2()))
             | LKoniec -> LElement(head, fun () -> LKoniec)
         end
     | _ -> LKoniec
