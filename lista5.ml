@@ -37,14 +37,12 @@ print_list_int (ltake (11, lmap (fun x -> x*x*x) (lfrom 0)));;
 
 print_endline "## Zad 1";;
 
-let rec lrepeatIter (x, k, lxs) =
-  if k = 0 then Lazy.force lxs
-  else lrepeatIter (x, k-1, lazy(LCons(x, lxs)))
-;;
-
-let rec lrepeat k = function
-  | LNil -> LNil
-  | LCons(hd, lazy tl) -> lrepeatIter (hd, k, lazy(lrepeat k tl))
+let rec lrepeat k lxs =
+  let rec lrepeatHelper = function
+    | (_, LNil) -> LNil
+    | (0, LCons(_, lazy tl)) -> lrepeatHelper (k, tl)
+    | (a, (LCons(hd, _) as l)) -> LCons(hd, lazy(lrepeatHelper (a-1, l)))
+  in lrepeatHelper (k, lxs)
 ;;
 
 print_list_int (ltake (11, lrepeat 3 (lfrom 0)));;
