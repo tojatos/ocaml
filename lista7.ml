@@ -114,7 +114,7 @@ struct
       q.r <- q.r + 1;
       if q.r = Array.length q.a then q.r <- 0
     end
-  let dequeue q = if isEmpty q then raise (Empty "deq")
+  let dequeue q = if isEmpty q then ()
     else begin
       q.f <- q.f + 1;
       if q.f = Array.length q.a then q.f <- 0
