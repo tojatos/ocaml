@@ -36,16 +36,16 @@ struct
   exception Empty of string
   let empty() = ([], [])
   let enqueue(x, queue) = match queue with
-    | ([], yl) -> (List.rev (x::yl), [])
+    | ([], []) -> ([x], [])
     | (xl, yl) -> (xl, x::yl)
   let dequeue = function
-    | (h::t, yl) -> begin match t with
+    | (_::t, yl) -> begin match t with
         | [] -> (List.rev yl, [])
         | _ -> (t, yl)
       end
-    | _ -> raise (Empty "queue dequeue error")
+    | q -> q
   let first = function
-    | (h::t, _) -> h
+    | (h::_, _) -> h
     | _ -> raise (Empty "queue first error")
   let isEmpty xs = xs = empty()
 end
